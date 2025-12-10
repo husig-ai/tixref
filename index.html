@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background: #7c3aed;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background: #6d28d9;
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 25px 0 15px 0;
+            color: #333;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form id="contactForm">
+            <div class="section-title">Your Information</div>
+            
+            <div class="form-group">
+                <label for="yourName">Your Name *</label>
+                <input type="text" id="yourName" name="your_name" placeholder="Your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="yourEmail">Your Email *</label>
+                <input type="email" id="yourEmail" name="your_email" placeholder="your@email.com" required>
+            </div>
+            
+            <div class="section-title">Organizer Information</div>
+            
+            <div class="form-group">
+                <label for="organizerName">Organizer Name *</label>
+                <input type="text" id="organizerName" name="organizer_name" placeholder="John Doe" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="organizerEmail">Email *</label>
+                <input type="email" id="organizerEmail" name="organizer_email" placeholder="john@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number (Optional)</label>
+                <input type="tel" id="phoneNumber" name="phone_number" placeholder="(555) 123-4567">
+            </div>
+            
+            <div class="form-group">
+                <label for="companyName">Company Name *</label>
+                <input type="text" id="companyName" name="company_name" placeholder="Acme Events Inc." required>
+            </div>
+            
+            <div class="form-group">
+                <label for="additionalNotes">Additional Notes</label>
+                <textarea id="additionalNotes" name="additional_notes" placeholder="Any additional information about the event or organizer..."></textarea>
+            </div>
+            
+            <div class="message" id="message"></div>
+            
+            <button type="submit" class="submit-btn" id="submitBtn">Submit Referral</button>
+        </form>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Initialize EmailJS
+        emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageDiv = document.getElementById('message');
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+        }
+
+        function hideMessage() {
+            messageDiv.style.display = 'none';
+        }
+
+        function setLoading(isLoading) {
+            submitBtn.disabled = isLoading;
+            submitBtn.textContent = isLoading ? 'Submitting...' : 'Submit Referral';
+        }
+
+        async function saveToSupabase(formData) {
+            // TODO: Replace 'contacts' with your actual table name
+            const { data, error } = await supabase
+                .from('contacts')
+                .insert([
+                    {
+                        your_name: formData.your_name,
+                        your_email: formData.your_email,
+                        organizer_name: formData.organizer_name,
+                        organizer_email: formData.organizer_email,
+                        phone_number: formData.phone_number || null,
+                        company_name: formData.company_name,
+                        additional_notes: formData.additional_notes || null,
+                        created_at: new Date().toISOString()
+                    }
+                ]);
+
+            if (error) {
+                console.error('Supabase error:', error);
+                throw new Error('Failed to save data');
+            }
+
+            return data;
+        }
+
+        async function sendEmail(formData) {
+            // TODO: Replace with your EmailJS service ID and template ID
+            const templateParams = {
+                your_name: formData.your_name,
+                your_email: formData.your_email,
+                organizer_name: formData.organizer_name,
+                organizer_email: formData.organizer_email,
+                phone_number: formData.phone_number || 'Not provided',
+                company_name: formData.company_name,
+                additional_notes: formData.additional_notes || 'No additional notes'
+            };
+
+            const result = await emailjs.send(
+                'YOUR_EMAILJS_SERVICE_ID',
+                'YOUR_EMAILJS_TEMPLATE_ID',
+                templateParams
+            );
+
+            return result;
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessage();
+            setLoading(true);
+
+            try {
+                // Get form data
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                // Save to Supabase
+                console.log('Saving to Supabase...');
+                await saveToSupabase(data);
+
+                // Send email
+                console.log('Sending email...');
+                await sendEmail(data);
+
+                // Success
+                showMessage('Thank you! Your referral has been submitted successfully.', 'success');
+                form.reset();
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Something went wrong. Please try again.', 'error');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Log configuration for debugging
+        console.log('Configuration needed:');
+        console.log('1. Replace SUPABASE_URL with your Supabase project URL');
+        console.log('2. Replace SUPABASE_ANON_KEY with your Supabase anon key');
+        console.log('3. Replace YOUR_EMAILJS_PUBLIC_KEY with your EmailJS public key');
+        console.log('4. Replace YOUR_EMAILJS_SERVICE_ID with your EmailJS service ID');
+        console.log('5. Replace YOUR_EMAILJS_TEMPLATE_ID with your EmailJS template ID');
+        console.log('6. Create a table called "contacts" in Supabase with the appropriate columns');
+    </script>
+</body>
+</html>
