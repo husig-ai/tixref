@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Form</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -132,12 +132,14 @@
 
     <script>
         // Initialize Supabase
-        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_URL = 'https://kvspaolyhblvncsjzkhf.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_F6xumE-g6-ZcEiKEQKza2A_WE0w1HJR';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-        // Initialize EmailJS
-        emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+        // Initialize EmailJS (updated syntax)
+        emailjs.init({
+            publicKey: 'RWAuj0mDQiTOKuHRp'
+        });
 
         const form = document.getElementById('contactForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -159,7 +161,6 @@
         }
 
         async function saveToSupabase(formData) {
-            // TODO: Replace 'contacts' with your actual table name
             const { data, error } = await supabase
                 .from('contacts')
                 .insert([
@@ -184,7 +185,6 @@
         }
 
         async function sendEmail(formData) {
-            // TODO: Replace with your EmailJS service ID and template ID
             const templateParams = {
                 your_name: formData.your_name,
                 your_email: formData.your_email,
@@ -192,12 +192,13 @@
                 organizer_email: formData.organizer_email,
                 phone_number: formData.phone_number || 'Not provided',
                 company_name: formData.company_name,
-                additional_notes: formData.additional_notes || 'No additional notes'
+                additional_notes: formData.additional_notes || 'No additional notes',
+                current_time: new Date().toLocaleString()
             };
 
             const result = await emailjs.send(
-                'YOUR_EMAILJS_SERVICE_ID',
-                'YOUR_EMAILJS_TEMPLATE_ID',
+                'service_z8iz60h',
+                'template_f1hv84q',
                 templateParams
             );
 
@@ -210,19 +211,15 @@
             setLoading(true);
 
             try {
-                // Get form data
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData);
-
-                // Save to Supabase
+                
                 console.log('Saving to Supabase...');
                 await saveToSupabase(data);
-
-                // Send email
+                
                 console.log('Sending email...');
                 await sendEmail(data);
-
-                // Success
+                
                 showMessage('Thank you! Your referral has been submitted successfully.', 'success');
                 form.reset();
 
@@ -233,15 +230,6 @@
                 setLoading(false);
             }
         });
-
-        // Log configuration for debugging
-        console.log('Configuration needed:');
-        console.log('1. Replace SUPABASE_URL with your Supabase project URL');
-        console.log('2. Replace SUPABASE_ANON_KEY with your Supabase anon key');
-        console.log('3. Replace YOUR_EMAILJS_PUBLIC_KEY with your EmailJS public key');
-        console.log('4. Replace YOUR_EMAILJS_SERVICE_ID with your EmailJS service ID');
-        console.log('5. Replace YOUR_EMAILJS_TEMPLATE_ID with your EmailJS template ID');
-        console.log('6. Create a table called "contacts" in Supabase with the appropriate columns');
     </script>
 </body>
 </html>
