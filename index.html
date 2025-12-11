@@ -3,132 +3,958 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Form</title>
+    <title>TixFix Referral Program - Turn Your Network Into Unlimited Cash</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            /* TixFix Brand Colors */
+            --primary-600: #4338CA;
+            --primary-700: #3730A3;
+            --primary-800: #312E81;
+            --primary-900: #1E1B4B;
+            --purple-500: #8B5CF6;
+            --purple-600: #7C3AED;
+            --purple-700: #6D28D9;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --pink-500: #EC4899;
+            --pink-600: #DB2777;
+            
+            /* Glass Colors */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-cosmic: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff);
+            
+            /* Text */
+            --text-white: #ffffff;
+            --text-gray-100: #f3f4f6;
+            --text-gray-200: #e5e7eb;
+            --text-gray-400: #9ca3af;
+            --text-gray-600: #6b7280;
+            --text-gray-800: #1f2937;
+            --text-gray-900: #111827;
         }
-        .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
+
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        textarea {
-            height: 100px;
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(45deg, #1a0b33, #2d1b4e, #1e2a78, #0f1419);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--text-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            display: block;
+            pointer-events: none;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(1);
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        .logo:hover {
+            transform: scale(1.05) rotateY(10deg);
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--purple-500), var(--blue-500));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-white);
+            font-weight: 800;
+            font-size: 20px;
+            box-shadow: 0 8px 16px rgba(123, 60, 237, 0.3);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-white), var(--text-gray-200));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 3vw, 1.5rem);
+            font-weight: 400;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: slideInUp 1s ease-out 0.6s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ff0080, #ff4d6d, #c471f5, #12c2e9);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 3s ease infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 128, 0.5)) 
+                    drop-shadow(0 0 20px rgba(196, 113, 245, 0.3));
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(255, 0, 128, 0.8);
+        }
+
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Sections */
+        .section {
+            padding: 3rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            opacity: 0.9;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Rewards Grid */
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .reward-card {
+            position: relative;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .reward-card:hover {
+            transform: perspective(1000px) rotateY(10deg) translateY(-20px);
+        }
+
+        .reward-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            z-index: -1;
+        }
+
+        .reward-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            animation: iconSpin 8s linear infinite;
+        }
+
+        @keyframes iconSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .bronze .reward-icon {
+            background: linear-gradient(135deg, #CD7F32, #B8860B);
+            box-shadow: 0 15px 35px rgba(205, 127, 50, 0.3);
+        }
+
+        .silver .reward-icon {
+            background: linear-gradient(135deg, #C0C0C0, #708090);
+            box-shadow: 0 15px 35px rgba(192, 192, 192, 0.3);
+        }
+
+        .gold .reward-icon {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.3);
+        }
+
+        .reward-amount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-white), var(--text-gray-200));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reward-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .reward-description {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Math section */
+        .math-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .math-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                rgba(255, 0, 110, 0.1), 
+                rgba(131, 56, 236, 0.1), 
+                rgba(58, 134, 255, 0.1), 
+                rgba(255, 0, 110, 0.1));
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .math-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .math-example {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .math-example:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* Form Section */
+        .form-section {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--text-white);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--purple-500);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+            transform: scale(1.02);
+        }
+
+        .form-textarea {
+            min-height: 100px;
             resize: vertical;
         }
+
         .submit-btn {
-            background: #7c3aed;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
             width: 100%;
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--purple-600), var(--blue-600), var(--pink-500));
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 16px;
+            color: var(--text-white);
+            font-size: 1.25rem;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(123, 60, 237, 0.6),
+                        0 0 0 1px rgba(255, 255, 255, 0.2);
+            animation: ctaPulse 2s infinite;
         }
+
+        @keyframes ctaPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 8px 32px rgba(123, 60, 237, 0.6),
+                           0 0 0 1px rgba(255, 255, 255, 0.2);
+            }
+            50% { 
+                transform: scale(1.02); 
+                box-shadow: 0 12px 40px rgba(123, 60, 237, 0.8),
+                           0 0 0 2px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
         .submit-btn:hover {
-            background: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(123, 60, 237, 0.4);
         }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
         .submit-btn:disabled {
-            background: #ccc;
+            opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 25px 0 15px 0;
-            color: #333;
+
+        /* Section headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.25rem;
+            font-weight: 700;
         }
+
+        .section-header:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--purple-500), var(--blue-500));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        /* Messages */
         .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 12px;
             display: none;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
         }
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
         }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            max-width: 800px;
+            margin: 4rem auto 0;
+        }
+
+        .steps-list {
+            list-style: none;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--purple-500), var(--blue-500));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 16px rgba(123, 60, 237, 0.3);
+        }
+
+        .step-content h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+
+        .step-content p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 0.75rem;
+            }
+
+            .section {
+                padding: 2rem 0;
+            }
+
+            .rewards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .reward-card {
+                padding: 2rem;
+            }
+
+            .form-section, .math-section {
+                padding: 2rem;
+            }
+
+            .step-item {
+                padding: 1.5rem;
+            }
+
+            .math-examples {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            footer .container > div > div:first-child {
+                padding: 1.5rem;
+            }
+
+            footer .container > div > div:first-child > div {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 1rem 0;
+            }
+
+            .logo {
+                padding: 0.75rem 1.5rem;
+            }
+
+            .logo-text {
+                font-size: 24px;
+            }
+
+            .step-item {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <form id="contactForm">
-            <div class="section-title">Your Information</div>
-            
-            <div class="form-group">
-                <label for="yourName">Your Name *</label>
-                <input type="text" id="yourName" name="your_name" placeholder="Your full name" required>
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="logo">
+                    <img src="https://v0-referral-portal-plan.vercel.app/images/tixfix.png" 
+                         alt="TixFix Logo" 
+                         style="width: 48px; height: 48px; border-radius: 12px; object-fit: contain;"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="logo-icon" style="display: none;">T</div>
+                    <div class="logo-text">tixfix</div>
+                </div>
+
+                <div class="hero-badge">🎯 Referral Rewards Program</div>
+
+                <h1 class="hero-title">
+                    Turn Your Network Into<br>
+                    <span class="highlight">Unlimited Cash</span>
+                </h1>
+
+                <p class="hero-subtitle">
+                    Know event organizers? Make <strong>$100 for each organizer</strong> you refer to TixFix. No limits on how many you can refer — the more organizers, the more you earn!
+                </p>
             </div>
-            
-            <div class="form-group">
-                <label for="yourEmail">Your Email *</label>
-                <input type="email" id="yourEmail" name="your_email" placeholder="your@email.com" required>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div style="color: rgba(255,255,255,0.6); font-size: 24px;">↓</div>
+        </div>
+    </section>
+
+    <!-- Rewards Section -->
+    <section class="section" id="rewards">
+        <div class="container">
+            <h2 class="section-title">$100 For Each Organizer</h2>
+            <p class="section-subtitle">
+                Your earnings stack up fast. Each organizer you refer earns you $100 total when their first 3 events hit 50 tickets each.
+            </p>
+
+            <div class="rewards-grid">
+                <div class="reward-card bronze glass-card">
+                    <div class="reward-icon">💎</div>
+                    <div class="reward-amount">$20</div>
+                    <div class="reward-title">Bronze Reward</div>
+                    <div class="reward-description">
+                        Your first $20 is the easiest. Just connect one organizer who hits 50 tickets sold. That's it!
+                    </div>
+                </div>
+
+                <div class="reward-card silver glass-card">
+                    <div class="reward-icon">🚀</div>
+                    <div class="reward-amount">$50</div>
+                    <div class="reward-title">Silver Reward</div>
+                    <div class="reward-description">
+                        Halfway there! Your second successful event bumps you to $50 total. The finish line is in sight.
+                    </div>
+                </div>
+
+                <div class="reward-card gold glass-card">
+                    <div class="reward-icon">👑</div>
+                    <div class="reward-amount">$100</div>
+                    <div class="reward-title">Gold Reward</div>
+                    <div class="reward-description">
+                        This is it — $100 in your pocket. One more successful event and you've maxed out the challenge!
+                    </div>
+                </div>
             </div>
-            
-            <div class="section-title">Organizer Information</div>
-            
-            <div class="form-group">
-                <label for="organizerName">Organizer Name *</label>
-                <input type="text" id="organizerName" name="organizer_name" placeholder="John Doe" required>
+        </div>
+    </section>
+
+    <!-- Math Section -->
+    <section class="section" id="math">
+        <div class="container">
+            <div class="math-section">
+                <h3 class="section-title" style="margin-bottom: 1rem;">The Math Is Simple</h3>
+                <p style="font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.9;">
+                    Per Organizer: 3 events × 50 tickets each = $100
+                </p>
+                
+                <div class="math-examples">
+                    <div class="math-example">
+                        <h4 style="color: #60a5fa; font-size: 1.5rem;">Refer 5 Organizers</h4>
+                        <div style="font-size: 1.25rem; font-weight: 700;">= $500</div>
+                    </div>
+                    <div class="math-example">
+                        <h4 style="color: #a78bfa; font-size: 1.5rem;">Refer 10 Organizers</h4>
+                        <div style="font-size: 1.25rem; font-weight: 700;">= $1,000</div>
+                    </div>
+                    <div class="math-example">
+                        <h4 style="color: #f472b6; font-size: 1.5rem;">No Limits</h4>
+                        <div style="font-size: 1.25rem; font-weight: 700;">∞ Unlimited</div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="organizerEmail">Email *</label>
-                <input type="email" id="organizerEmail" name="organizer_email" placeholder="john@example.com" required>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="section" id="form">
+        <div class="container">
+            <div class="form-section">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">Submit Your Referral</h2>
+                    <p style="opacity: 0.8;">No sales pitch required. No complex tracking. Just submit and we'll handle the rest.</p>
+                </div>
+
+                <form id="contactForm">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        Your Information
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yourName" class="form-label">Your Name <span style="color: #f87171;">*</span></label>
+                        <input type="text" id="yourName" name="your_name" class="form-input" placeholder="Your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yourEmail" class="form-label">Your Email <span style="color: #f87171;">*</span></label>
+                        <input type="email" id="yourEmail" name="your_email" class="form-input" placeholder="your@email.com" required>
+                    </div>
+
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        Organizer Information
+                    </div>
+
+                    <div class="form-group">
+                        <label for="organizerName" class="form-label">Organizer Name <span style="color: #f87171;">*</span></label>
+                        <input type="text" id="organizerName" name="organizer_name" class="form-input" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="organizerEmail" class="form-label">Email <span style="color: #f87171;">*</span></label>
+                        <input type="email" id="organizerEmail" name="organizer_email" class="form-input" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber" class="form-label">Phone Number (Optional)</label>
+                        <input type="tel" id="phoneNumber" name="phone_number" class="form-input" placeholder="(555) 123-4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="companyName" class="form-label">Company Name <span style="color: #f87171;">*</span></label>
+                        <input type="text" id="companyName" name="company_name" class="form-input" placeholder="Acme Events Inc." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalNotes" class="form-label">Additional Notes</label>
+                        <textarea id="additionalNotes" name="additional_notes" class="form-textarea" placeholder="Any additional information about the event or organizer..."></textarea>
+                    </div>
+
+                    <div class="message" id="message"></div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Submit Your Referral ⚡
+                    </button>
+                </form>
             </div>
-            
-            <div class="form-group">
-                <label for="phoneNumber">Phone Number (Optional)</label>
-                <input type="tel" id="phoneNumber" name="phone_number" placeholder="(555) 123-4567">
+
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3 style="text-align: center; font-size: 2.5rem; font-weight: 800; margin-bottom: 3rem;">What Happens Next?</h3>
+                
+                <ul class="steps-list">
+                    <li class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>TixFix contacts organizer within 24 hours</h4>
+                            <p>Our team reaches out immediately to begin the onboarding process</p>
+                        </div>
+                    </li>
+
+                    <li class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Full process support and guidance</h4>
+                            <p>We handle everything from setup to their first successful event</p>
+                        </div>
+                    </li>
+
+                    <li class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Watch your rewards stack up automatically</h4>
+                            <p>$20 after event 1, $50 total after event 2, and $100 after event 3. Amazon gift cards sent to your email.</p>
+                        </div>
+                    </li>
+                </ul>
             </div>
-            
-            <div class="form-group">
-                <label for="companyName">Company Name *</label>
-                <input type="text" id="companyName" name="company_name" placeholder="Acme Events Inc." required>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="section" style="padding: 2rem 0; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <div style="background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-white);">Contact Us</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <a href="mailto:admin@tixfix.ai" style="color: #60a5fa; text-decoration: none; font-weight: 600; font-size: 1.125rem; transition: color 0.3s ease;" 
+                               onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#60a5fa'">
+                                admin@tixfix.ai
+                            </a>
+                        </div>
+                        <div>
+                            <a href="tel:+14154042985" style="color: #a78bfa; text-decoration: none; font-weight: 600; font-size: 1.125rem; transition: color 0.3s ease;"
+                               onmouseover="this.style.color='#8b5cf6'" onmouseout="this.style.color='#a78bfa'">
+                                +1 415 404 2985
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div style="opacity: 0.6; font-size: 0.875rem; line-height: 1.5;">
+                    2025 TixFix, LLC. San Francisco, CA. All Rights Reserved.
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="additionalNotes">Additional Notes</label>
-                <textarea id="additionalNotes" name="additional_notes" placeholder="Any additional information about the event or organizer..."></textarea>
-            </div>
-            
-            <div class="message" id="message"></div>
-            
-            <button type="submit" class="submit-btn" id="submitBtn">Submit Referral</button>
-        </form>
-    </div>
+        </div>
+    </footer>
 
     <script>
         // Initialize Supabase
@@ -136,11 +962,44 @@
         const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_F6xumE-g6-ZcEiKEQKza2A_WE0w1HJR';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-        // Initialize EmailJS (updated syntax)
+        // Initialize EmailJS
         emailjs.init({
             publicKey: 'RWAuj0mDQiTOKuHRp'
         });
 
+        // Create floating particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Form handling
         const form = document.getElementById('contactForm');
         const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
@@ -149,6 +1008,7 @@
             messageDiv.textContent = text;
             messageDiv.className = `message ${type}`;
             messageDiv.style.display = 'block';
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function hideMessage() {
@@ -157,7 +1017,7 @@
 
         function setLoading(isLoading) {
             submitBtn.disabled = isLoading;
-            submitBtn.textContent = isLoading ? 'Submitting...' : 'Submit Referral';
+            submitBtn.textContent = isLoading ? 'Submitting...' : 'Submit Your Referral ⚡';
         }
 
         async function saveToSupabase(formData) {
@@ -214,21 +1074,32 @@
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData);
                 
-                console.log('Saving to Supabase...');
                 await saveToSupabase(data);
-                
-                console.log('Sending email...');
                 await sendEmail(data);
                 
-                showMessage('Thank you! Your referral has been submitted successfully.', 'success');
+                showMessage('🎉 Thank you! Your referral has been submitted successfully. We\'ll contact the organizer within 24 hours and keep you updated on your reward progress.', 'success');
                 form.reset();
 
             } catch (error) {
                 console.error('Error:', error);
-                showMessage('Something went wrong. Please try again.', 'error');
+                showMessage('Something went wrong. Please try again or contact us directly at admin@tixfix.ai', 'error');
             } finally {
                 setLoading(false);
             }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+        });
+
+        // Add smooth scroll for better mobile experience
+        document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+            input.addEventListener('focus', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
         });
     </script>
 </body>
