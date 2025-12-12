@@ -101,3 +101,32 @@
 - Collect the following keys:
 - `service_key` and `template_key` from emailjs
 - `url` and `publishable_key` from supabase
+
+
+```
+-- Supabase Table Schema
+-- Run this in your Supabase SQL editor
+
+CREATE TABLE contacts (
+    id BIGSERIAL PRIMARY KEY,
+    your_name TEXT NOT NULL,
+    your_email TEXT NOT NULL,
+    organizer_name TEXT NOT NULL,
+    organizer_email TEXT NOT NULL,
+    phone_number TEXT,
+    company_name TEXT NOT NULL,
+    additional_notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Optional: Enable Row Level Security
+ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+
+-- Optional: Create a policy to allow inserts from anyone
+CREATE POLICY "Enable insert for all users" ON "public"."contacts" 
+FOR INSERT WITH CHECK (true);
+
+-- Optional: Create a policy to allow reading (if you need it for admin dashboard later)
+CREATE POLICY "Enable read access for all users" ON "public"."contacts" 
+FOR SELECT USING (true);
+```
