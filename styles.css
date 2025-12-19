@@ -279,6 +279,7 @@ body {
     margin-bottom: 1.5rem;
     opacity: 0;
     animation: slideInUp 1s ease-out 0.5s forwards;
+    color: var(--text-white);
 }
 
 .hero-subtitle {
@@ -293,16 +294,32 @@ body {
 }
 
 .highlight {
+    /* Fallback color for browsers that don't support gradient text */
+    color: #ff4d6d !important;
     background: linear-gradient(135deg, #ff0080, #ff4d6d, #c471f5, #12c2e9);
     background-size: 300% 300%;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
     animation: gradientText 3s ease infinite;
     filter: drop-shadow(0 0 15px rgba(255, 0, 128, 0.6)) 
             drop-shadow(0 0 25px rgba(196, 113, 245, 0.4));
     font-weight: 900;
-    text-shadow: 0 0 30px rgba(255, 0, 128, 0.8);
+    position: relative;
+    display: inline-block;
+}
+
+/* Fallback for browsers that don't support background-clip: text */
+@supports not (background-clip: text) or not (-webkit-background-clip: text) {
+    .highlight {
+        background: none !important;
+        color: #ff4d6d !important;
+        -webkit-text-fill-color: #ff4d6d !important;
+        text-shadow: 0 0 15px rgba(255, 77, 109, 0.6),
+                     0 0 30px rgba(255, 77, 109, 0.4);
+    }
 }
 
 @keyframes gradientText {
