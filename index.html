@@ -241,10 +241,10 @@
     </footer>
 
     <script>
-        // Initialize Supabase
+        // Initialize Supabase - FIXED: Changed variable name to avoid conflict
         const SUPABASE_URL = 'https://rctxlnrnohmoxmrbszrr.supabase.co';
         const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_AueduVeJo7Hak2fXF6Bgug_4Ah6WXu-';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
         // Initialize EmailJS
         emailjs.init({
@@ -315,7 +315,8 @@
         }
 
         async function saveToSupabase(formData) {
-            const { data, error } = await supabase
+            // FIXED: Using supabaseClient instead of supabase
+            const { data, error } = await supabaseClient
                 .from('contacts')
                 .insert([
                     {
